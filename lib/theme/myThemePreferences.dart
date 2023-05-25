@@ -1,6 +1,8 @@
+// ignore: file_names
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyThemePreferences {
+  // ignore: constant_identifier_names
   static const THEME_KEY = "theme_key";
 
   setTheme(bool value) async {

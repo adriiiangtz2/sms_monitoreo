@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:monitoreo_sms/models/mapo_units.dart';
 import 'package:monitoreo_sms/models/unitsNew.dart';
+import 'package:monitoreo_sms/screems/home_screem_copy.dart';
 import 'package:monitoreo_sms/screems/login_screem.dart';
 import 'package:monitoreo_sms/screems/tab2_page.dart';
 import 'package:monitoreo_sms/services/services.dart';
@@ -16,87 +18,8 @@ import 'package:skeletons/skeletons.dart';
 
 import 'package:flutter/material.dart';
 
-
-class InicioScreen extends StatelessWidget {
-
-  @override
- Widget build(BuildContext context) {
-    return  ChangeNotifierProvider(
-      create: (context) => _NavegacionModel(),
-      child: Scaffold(
-        body:_Paginas(),
-        bottomNavigationBar: _Navegacion(),
-      ),
-    );
-  }
-}
-
-class _Navegacion extends StatelessWidget {
-  const _Navegacion();
-  @override
-  Widget build(BuildContext context) {
-  final navegacionModel = Provider.of<_NavegacionModel>(context);
- 
-  // navegacionModel._paginaActual;
-  // print(navegacionModel.paginaActual);
-
-    return BottomNavigationBar(
-      currentIndex: navegacionModel.paginaActual,
-      onTap: (value) => navegacionModel.paginaActual=value,
-      items:
-    const [
-      BottomNavigationBarItem(icon:Icon(Icons.gps_fixed ) , label:"Wialom",activeIcon:Icon(Icons.gps_fixed , color: AppTheme.primary  )),
-      BottomNavigationBarItem(icon:Icon(Icons.gps_fixed ) , label:"Mapon" , activeIcon:Icon(Icons.gps_fixed , color: AppTheme.primary )),
-    ] 
-    );
-  }
-}
-
-class _Paginas extends StatelessWidget {
-  const _Paginas();
-
-  @override
-  Widget build(BuildContext context) {
-    final navegacionModel = Provider.of<_NavegacionModel>(context);
-
-
-    return PageView(
-      controller: navegacionModel.pageController,
-      physics: const NeverScrollableScrollPhysics(),
-
-    //  physics: BouncingScrollPhysics(),
-     children: [
-      HomeScreen3(),
-      // HomeScreen3(),
-      TapPage2(),
-
-     ],
-    );
-  }
-}
-
-
-class _NavegacionModel with ChangeNotifier {
-
-    int _paginaActual=0;
-    PageController _pageController = new PageController(initialPage: 0);
-
-
-    int get paginaActual => _paginaActual;
-    set paginaActual(int valor){
-      _paginaActual=valor;
-      _pageController.animateToPage(valor,duration: Duration(milliseconds: 250), curve: Curves.easeInCirc);
-      notifyListeners();
-    }
-
-    PageController get pageController => _pageController;
-
-  
-}
-
-
-class HomeScreen3 extends StatelessWidget {
-  const HomeScreen3({Key? key}) : super(key: key);
+class TapPage2 extends StatelessWidget {
+  const TapPage2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +27,7 @@ class HomeScreen3 extends StatelessWidget {
     final themeNotifier = Provider.of<ModelTheme>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Unidades'),
+        title: const Text('Unidades Mapon'),
         actions: [
           IconButton(
               icon: const Icon(Icons.call),
@@ -140,12 +63,12 @@ class HomeScreen3 extends StatelessWidget {
       drawer: const SideMenu(),
       body: RefreshIndicator(
         onRefresh: () async {
-          await authService.refreshList();
+          await authService.refreshListMapon();
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => InicioScreen()));
         },
         child: FutureBuilder(
-          future: UnitsService.getAllUnits(),
+          future: UnitsService.getAllUnitsMapon(),
           builder: (context, snapshot) => (snapshot.hasData) ?  ContentListView2(unidades: snapshot.data) : const _skeletonLoading(),
         ),
       ),
@@ -190,8 +113,8 @@ class _ContentListViewState extends State<ContentListView2> {
   @override
   Widget build(BuildContext context) {
 
-    errorImg(String imagen, DataUnits value) async {
-      if (value.imgLoad == true) return imagen;
+    errorImg( String imagen , MaponUnits value) async {
+     if (value.imgLoad == true) return imagen;
       if (value.imgLoad == false) return "Error";
 
       final response = await http.get(Uri.parse(imagen));
@@ -201,7 +124,7 @@ class _ContentListViewState extends State<ContentListView2> {
         return "Error";
       } else {
         value.imgLoad = true;
-        return value.image;
+        return value.name;
       }
     }
 
@@ -220,7 +143,7 @@ class _ContentListViewState extends State<ContentListView2> {
         unidadesAll = widget.unidades;
         // print("Entra con valor");
         for (var i = 0; i < unidadesAll.length; i++) {
-          final DataUnits uni = unidadesAll[i];
+          final MaponUnits uni = unidadesAll[i];
           final name = uni.name.toLowerCase();
           final input = value.toLowerCase();
           if (name.contains(input)) {
@@ -277,204 +200,59 @@ class _ContentListViewState extends State<ContentListView2> {
               const EdgeInsets.only(left: 10, right: 10, bottom: 70, top: 10),
           itemCount: unidadesAll.length,
           itemBuilder: (context, index) {
-            final DataUnits value = unidadesAll[index];
+            final MaponUnits value = unidadesAll[index];
 
-            // print(value.hardware);
+            print(value);
 
             return Card(
               elevation: 3,
-              child: ListTile(
-                leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    // child: unidad['uri'] == null || unidad['uri'] == ""  ?
-                    child: Container(
-                      width: 34,
-                      child: FutureBuilder(
-                        future: errorImg("${unidadesAll[index].image}", value),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const CircularProgressIndicator();
-                            // return  Text("");
-                          }
-                          // print(snapshot.data);
-                          if (snapshot.data == "Error") {
-                            return const SizedBox(
-                                height: 30,
-                                width: 28,
-                                child: Icon(
-                                  Icons.image_not_supported_rounded,
-                                  color: Color.fromARGB(136, 214, 214, 214),
-                                  size: 30,
-                                ));
-                            // fit: BoxFit.scaleDown,
-                            // width:50,
-                            // height: 50,
-                            //   );;
-                          } else {
-                            return Image.network(
-                              "${snapshot.data}",
-                              fit: BoxFit.scaleDown,
-                              width: 28,
-                              height: 30,
-                            );
-                          }
-                        },
-                      ),
-                    )),
-                onTap: () async {
-                  // final authService = Provider.of<AuthService>(context, listen: false);
-
-                  //  final device= Provider.of<DispositivosService>(context, listen: false);
-                  //  print("click ${unidadesAll[index].id}");
-                  // await units.getOnetUnit(unidadesAll[index].id);
-
-                  // await device.dispositivosAll(idMarca);
-                  // await device.dispositivosTotal();
-                  // ignore: use_build_context_synchronously
-                  // Navigator.pushNamed(context, 'datails', arguments: unidadesAll[index].id);
-                  Navigator.of(context)
-                      .pushNamed('datails2', arguments: unidadesAll[index].id);
-                },
-                title: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Text(unidadesAll[index].name,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w400, fontSize: 13)),
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              child: SizedBox(
+                width: double.infinity,
+                child: ListTile(
+                  leading: const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Icon(
+                                    Icons.image_not_supported_rounded,
+                                    color: Colors.grey,
+                                    size: 30,
+                                  )),
+                  onTap: ()  {
+                    Navigator.of(context).pushNamed('datailsMapon', arguments: value.unitId);
+                  },
+                  title: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(value.name,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 13)),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${value.unitId}",
+                            style: const TextStyle(
+                                color: AppTheme.primary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13)),
+                        Text("Hardware: ${value.boxId}")
+                      ],
+                    ),
+                  ),
+                  trailing: const Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("${unidadesAll[index].id}",
-                          style: const TextStyle(
-                              color: AppTheme.primary,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13)),
-                      Text("Hardware: ${unidadesAll[index].hardware}")
+                      Icon(Icons.copy),
                     ],
                   ),
                 ),
-                trailing: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.copy),
-                  ],
-                ),
               ),
             );
-            // return  ListTile(
-            //   title: Text(unidadesAll[index].name),
-            //   leading:Icon(Icons.ac_unit),
-            //   subtitle: Padding(
-            //   padding: EdgeInsets.only(left: 8),
-            //   child: Row(
-            //     children: [
-            //       Text('${unidadesAll[index].id}'),
-
-            //       Text(""),
-            //     ],
-            //   ),
-
-            //   ),
-
-            // );
-            // final unidad = widget.unidades;
-            // final Units unitss2 = unidadesAll[index];
-            //   return Card(
-            //   elevation: 3,
-            //   child: ListTile(
-            //     leading: ClipRRect(
-            //       borderRadius: BorderRadius.circular(5),
-            //       // child: unidad['uri'] == null || unidad['uri'] == ""  ?
-            //       // child: FutureBuilder(
-            //       //   future:errorImg(unitss2.image ,unitss2 ),
-            //       //   builder: (context, snapshot) {
-            //       //     if(!snapshot.hasData){
-            //       //       return const CircularProgressIndicator();
-            //       //     }
-            //       //     // print(snapshot.data);
-            //       //     if(snapshot.data == "Error"){
-            //       //     return Container(
-            //       //       height: 50,
-            //       //       width: 50,
-            //       //       child: const Icon(Icons.image_not_supported_rounded , color: Color.fromARGB(136, 214, 214, 214),size: 30,));
-            //       //   // fit: BoxFit.scaleDown,
-            //       //   // width:50,
-            //       //   // height: 50,
-            //       //   //   );;
-
-            //       //     }else{
-            //       //        return Image.network("${snapshot.data}",
-            //       //   fit: BoxFit.scaleDown,
-            //       //   width: 50,
-            //       //   height: 50,
-            //       //     );
-            //       //     }
-            //       // },)
-            //     ),
-
-            //     onTap: () async {
-            //       final authService = Provider.of<AuthService>(context, listen: false);
-            //        final units= Provider.of<UnistProvider>(context, listen: false);
-            //       await units.getOnetUnit(authService.token);
-            //       // ignore: use_build_context_synchronously
-            //       Navigator.pushNamed(context, 'datails', arguments: unidad);
-            //      },
-            //       title: Padding(
-            //         padding: const EdgeInsets.all(2.0),
-            //         child: Text(unitss2.name ,style: const TextStyle( fontWeight: FontWeight.w400,fontSize:13 )),
-            //       ),
-            //       subtitle: Padding(
-            //         padding: const EdgeInsets.all(2.0),
-            //         child: Column(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children:  [
-            //   Text("${unitss2.id}",style: const TextStyle(color: Color(0xFD3234A2), fontWeight: FontWeight.w500,fontSize:13 )),
-            //   Text("Hardware: ${unitss2.hardware}")
-            //   ],
-            //     ),
-            //       ),
-            //       trailing: Row(
-            //         mainAxisSize: MainAxisSize.min,
-            //         children: const [
-            //            Icon(Icons.copy),
-            //         ],
-            //       ),
-            //   ),
-            //     );
+         
           },
         )),
-        SizedBox(height: 10,),
-
-
-//       BottomNavigationBar(
-//          backgroundColor: AppTheme.primary,
-//          elevation: 0,
-//   selectedFontSize: 15,
-//   selectedIconTheme: IconThemeData(color: Colors.white, size: 15),
-//   selectedItemColor: AppTheme.primary,
-//   selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-//   items: const <BottomNavigationBarItem>[
-//     BottomNavigationBarItem(
-//       icon: Icon(Icons.car_crash),
-//       label: 'wialom'
-//     ),
-//     BottomNavigationBarItem(
-//       icon: Icon(Icons.car_crash),
-//       label: 'Mapon'
-//     ),
-    
-//   ],
-// )
-
-
-
-
-
-
-
-        
+        SizedBox(height: 10,),        
       ],
     );
   }

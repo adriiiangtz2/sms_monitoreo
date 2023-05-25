@@ -46,8 +46,8 @@ class _SelectsDispositivosCommandScreenState extends State<SelectsDispositivosCo
                       children: <Widget>[
                         Row(
                           children: [
-                            Text("Seleccione una marca"),
-                            SizedBox(width: 10,),
+                            const Text("Seleccione una marca"),
+                            const SizedBox(width: 10,),
                                DropdownButton<String>(
                            value: dropdownValue,
                            icon: const Icon(Icons.arrow_downward),
@@ -55,7 +55,7 @@ class _SelectsDispositivosCommandScreenState extends State<SelectsDispositivosCo
                            style: const TextStyle(color: Color(0xFD3234A2)),
                            underline: Container(
                              height: 2,
-                             color: Color(0xFD3234A2),
+                             color: const Color(0xFD3234A2),
                            ),
                            onChanged: (String? value) {
                              // This is called when the user selects an item.
@@ -98,14 +98,14 @@ class _SelectsDispositivosCommandScreenState extends State<SelectsDispositivosCo
 
 
                    Step(
-                    title: new Text('Address'),
+                    title: const Text('Address'),
                     content: Column(
                       children: <Widget>[
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Home Address'),
+                          decoration: const InputDecoration(labelText: 'Home Address'),
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Postcode'),
+                          decoration: const InputDecoration(labelText: 'Postcode'),
                         ),
                       ],
                     ),
@@ -114,11 +114,11 @@ class _SelectsDispositivosCommandScreenState extends State<SelectsDispositivosCo
                     StepState.complete : StepState.disabled,
                   ),
                    Step(
-                    title: new Text('Mobile Number'),
+                    title: const Text('Mobile Number'),
                     content: Column(
                       children: <Widget>[
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Mobile Number'),
+                          decoration: const InputDecoration(labelText: 'Mobile Number'),
                         ),
                       ],
                     ),
@@ -132,8 +132,8 @@ class _SelectsDispositivosCommandScreenState extends State<SelectsDispositivosCo
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.list),
           onPressed: switchStepsType,
+          child: const Icon(Icons.list),
         ),
 
     );

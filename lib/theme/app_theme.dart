@@ -6,13 +6,19 @@ class AppTheme {
   // static const Color primary = Colors.teal;
   static const Color primary = Color(0xFD154072);
   static const Color secundaryBlack = Colors.black;
+  
 
   static final ThemeData lightTheme = ThemeData.light().copyWith(
     // primaryColor: Colors.black,
     appBarTheme: const AppBarTheme(
       color: primary,
-      elevation: 0
+      
+      
+      elevation: 0,
+      
     ),
+    useMaterial3: true,
+    
 
     // primaryColorLight: Colors.black12 ,
     // listTileTheme: ListTileThemeData(
@@ -47,7 +53,7 @@ class AppTheme {
     // ElevatedButton 
     elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-          primary: primary,
+          backgroundColor: primary,
           shape: const StadiumBorder(),
           elevation: 0
         ),

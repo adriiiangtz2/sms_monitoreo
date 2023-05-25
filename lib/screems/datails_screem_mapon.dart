@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:monitoreo_sms/models/unitsDatailsMapon.dart';
 import 'package:monitoreo_sms/services/services.dart';
 import 'package:monitoreo_sms/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,8 @@ import 'package:skeletons/skeletons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:flutter_sms/flutter_sms.dart';
 
-class DatailsScreen2 extends StatelessWidget {
-   const DatailsScreen2({Key? key}) : super(key: key);
+class DatailsScreenMapon extends StatelessWidget {
+   const DatailsScreenMapon({Key? key}) : super(key: key);
   
   
   @override
@@ -22,24 +23,15 @@ class DatailsScreen2 extends StatelessWidget {
      final device= Provider.of<DispositivosService>(context, listen: false);
     //  await device.dispositivosTotal();
     final routName = ModalRoute.of(context)!.settings.arguments;
-   
+   print(routName);
     return Scaffold(
       appBar: AppBar(
           title: const Text("Comandos e informacion"),
           backgroundColor: AppTheme.primary,
-          // actions: [
-          //   IconButton(
-          //       icon: const Icon(Icons.settings),
-          //       onPressed: () {
-          //         //Eliminando Storage
-          //         // Navigator.pushNamed(context, 'login');
-          //         Navigator.of(context).pushNamed('selects');
-          //       })
-          // ]
           ),
       body: SingleChildScrollView(
         child: FutureBuilder(
-          future: device.dispositivosTotal2(routName ,context) ,
+          future: device.dispositivosTotal2Mapon(routName ,context) ,
           builder: (context, snapshot) {
 
             if (snapshot.hasData) {
@@ -120,16 +112,17 @@ class _ContentDatailsInfoState extends State<ContentDatailsInfo> {
     //  ToastContext().init(context);
 
     final routName = ModalRoute.of(context)!.settings.arguments;
-    // print("hh h h h $routName");
+    print("$routName");
 
     final oneUnit = Provider.of<UnistProvider>(context);
     final deviceSer = Provider.of<DispositivosService>(context);
     final comand = Provider.of<CommandService>(context);
-    final UnitsDetails unidadid = oneUnit.oneUnit;
-    // print(unidadid);
-    final hwIsRegister = deviceSer.deviceValidator.contains("${unidadid.hw.id}");
+    final UnitsDetailsMapon unidadid = oneUnit.oneUnit;
+    print(unidadid.modelVer);
+    print(deviceSer.deviceValidator);
+    final hwIsRegister = deviceSer.deviceValidator.contains(unidadid.modelVer);
     // print("Hadware");
-    print(hwIsRegister);
+    print('$hwIsRegister viene el hw');
 
     var nombreComandoDisplay="";
 
@@ -172,38 +165,6 @@ class _ContentDatailsInfoState extends State<ContentDatailsInfo> {
 
 
 
-    // void _displayDialogAndroid(BuildContext context) {
-    // showDialog(
-    //     barrierDismissible: false,
-    //     context: context,
-    //     builder: (context) {
-    //       return AlertDialog(
-    //         elevation: 5,
-    //         title: const Text('Nombre de usuario incorrecto',textAlign: TextAlign.center),
-    //         shape: RoundedRectangleBorder(
-    //           borderRadius: BorderRadiusDirectional.circular(20)
-    //           ),
-    //         content: Column(
-    //           mainAxisSize: MainAxisSize.min,
-    //           children: const [
-    //             Text('Parece que el nombre de usuario que has introducido no pertenece a ninguna cuenta. Comprueba tu nombre de usuario y vuelve a intertarlo.',textAlign: TextAlign.center,),
-    //             SizedBox(height: 10),
-       
-    //             ],
-    //         ),
-    //         actions: [
-    //            TextButton(
-    //               onPressed: () => Navigator.pop(context),
-    //               child: const Center(child: Text('vuelva a intentarlo'))),
-    //         ],
-    //       );
-    //     });
-    // }
-
-
-
-
-
     return Container(
           padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
           child: Column(
@@ -211,61 +172,7 @@ class _ContentDatailsInfoState extends State<ContentDatailsInfo> {
               const SizedBox(
                 height: 5,
               ),
-              ExpansionTile(
-                title: Text(
-                  'Nombre Unidad : ${unidadid.nm}',
-                  style: const TextStyle(
-                      // color: Color(0xFD3234A2),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500),
-                ),
-                subtitle: const Text('Informacion de la unidad',
-                    ),
-                children: <Widget>[
-                  Card(
-                    elevation: 4,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Icon(Icons.person_pin_circle_outlined,
-                                  size: 60, ),
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: const [
-                                  Text('Nombre:'),
-                                  Text('Telefono:'),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: const [
-                                  Text('Sin nombre api',
-                                      style: TextStyle(
-                                          // color: Color(0xFD3234A2),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400)),
-                                  Text('sin telefono ',
-                                      style: TextStyle(
-                                          // color: Color(0xFD3234A2),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+          
               const SizedBox(
                 height: 5,
               ),
@@ -327,27 +234,27 @@ class _ContentDatailsInfoState extends State<ContentDatailsInfo> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    Text(unidadid.hw.name,
+                                    Text(unidadid.model,
                                         style: const TextStyle(
                                             // color: Color(0xFD3234A2),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400)),
-                                    Text(unidadid.hw.name,
+                                    Text(unidadid.modelVer,
                                         style: const TextStyle(
                                             // // color: Color(0xFD3234A2),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400)),
-                                    Text(unidadid.ph,
+                                    Text(unidadid.phone,
                                         style: const TextStyle(
                                             // // color: Color(0xFD3234A2),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400)),
-                                    Text(unidadid.uid,
+                                    Text('${unidadid.unitId}',
                                         style: const TextStyle(
                                             // // color: Color(0xFD3234A2),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400)),
-                                    Text('${unidadid.hw.id}',
+                                    Text('${unidadid.modelVer}',
                                         style: const TextStyle(
                                             // // color: Color(0xFD3234A2),
                                             fontSize: 16,
@@ -412,7 +319,7 @@ class _ContentDatailsInfoState extends State<ContentDatailsInfo> {
 
                   
 
-                            final telefono = unidadid.ph;
+                            final telefono = unidadid.phone;
 
                             // // print("ENVIARRRR COMANDO : ${myController.text}");
 
@@ -486,7 +393,7 @@ class _ContentDatailsInfoState extends State<ContentDatailsInfo> {
                             height: 500,
                             child: FutureBuilder(
                               future: comand.commandSms(
-                                  deviceSer.deviceTotal, '${unidadid.hw.id}'),
+                                  deviceSer.deviceTotal, unidadid.modelVer),
                               builder: (context,
                                   AsyncSnapshot<List<dynamic>> snapshot) {
                                 // print(snapshot.data?.length);
@@ -536,9 +443,9 @@ class _ContentDatailsInfoState extends State<ContentDatailsInfo> {
                                                       dta.dcComandoDispositivo;
                                                   final resp = newstring
                                                       .replaceAll(
-                                                          '{ID}', unidadid.uid)
+                                                          '{ID}', unidadid.imei)
                                                       .replaceAll("{id}",
-                                                          unidadid.uid);
+                                                          unidadid.imei);
                                                   // print(resp);
                                                   nombreComandoDisplay = "";
                                                   nombreComandoDisplay = dta.comando.cdComando;
@@ -586,7 +493,7 @@ class _ContentDatailsInfoState extends State<ContentDatailsInfo> {
                         onPressed: () {
                           // print(unidadid.hw.name);
                           // print("Modal");
-                          displayAddDispositivo(context ,unidadid.hw.name );
+                          displayAddDispositivo(context ,unidadid.modelVer );
                         },
                         color: AppTheme.primary,
                         child: const Text('Registrar Dispositivo',
@@ -687,7 +594,7 @@ class _dropButonState extends State<_dropButon> {
     final disposi = Provider.of<DispositivosService>(context);
     final marcaserive = Provider.of<MarcaService>(context);
     final unidadesProvider = Provider.of<UnistProvider>(context);
-    final UnitsDetails unidadid = unidadesProvider.oneUnit;
+    final UnitsDetailsMapon unidadid = unidadesProvider.oneUnit;
     final device = Provider.of<DispositivosService>(context, listen: false);
     final marca = Provider.of<MarcaService>(context, listen: false);
     // print("------ Vista --------- ");
@@ -756,19 +663,15 @@ class _dropButonState extends State<_dropButon> {
 
                     print("Nombre del dispo; ${registerForm.dispositivo}");
                     print("id de marca: ${selectval2}");
-                    print("Hardware unidad : ${unidadid.hw.id}");
-                    // print(data.idMarca);
-                    // await marcaserive.deleteMarca(registerForm.marca, data.idMarca);
+                    print("Hardware unidad : ${unidadid.modelVer}");
 
-                    await disposi.createDevice("${registerForm.dispositivo}",
-                        unidadid.hw.id, selectval2);
+                    await disposi.createDevice("${registerForm.dispositivo}",unidadid.modelVer, selectval2);
                     await device.dispositivosTotal();
 
                     await marca.marcasAll();
                     registerForm.isLoading = false;
                     Navigator.pop(context);
                     Navigator.of(context).pushNamed('marcas');
-                    //desbloquear
                   },
           )
         ],

@@ -41,7 +41,10 @@ class AuthService extends ChangeNotifier {
       await prefs.setString('nameLogin',name);
       await prefs.setString('passLogin',password);
 
+
+
       final url = Uri.https(_baseUrl, "/units");
+      final urlMapon = Uri.https(_baseUrl, "/units/mapon");
 
       final resp = await http.get(
         url,
@@ -59,6 +62,31 @@ class AuthService extends ChangeNotifier {
       }
       await prefs.setStringList('items', unitsArray);
 
+      final respMapon = await http.get(
+        urlMapon,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': prefs.getString('idToken') ?? '',
+        },
+      );
+      var dataMapon = json.decode(respMapon.body);
+      //  print(dataMapon[0]);
+
+
+
+      List<String> unitsArrayMapon = [];
+      for (var element in dataMapon) {
+        String user = jsonEncode(element);
+        unitsArrayMapon.add(user);
+      }
+      // print(unitsArrayMapon);
+      await prefs.setStringList('itemsMapon', unitsArrayMapon);
+
+
+
+
+      
+
       inicioSesion = true;
       notifyListeners();
     }
@@ -70,7 +98,10 @@ class AuthService extends ChangeNotifier {
     await prefs.remove('idToken');
     await prefs.remove('arrayUnits');
     await prefs.remove('items');
+    await prefs.remove('itemsMapon');
     await prefs.remove('us_name');
+    await prefs.remove('nameLogin');
+    await prefs.remove('passLogin');
     await prefs.clear();
     notifyListeners();
     return;
@@ -87,8 +118,8 @@ class AuthService extends ChangeNotifier {
       // final String _baseUrl = 'www.consola-sudsolutions.mx';
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final  name =  prefs.getStringList('nameLogin');
-    final  password =  prefs.getStringList('passLogin');
+    final  name =  prefs.getString('nameLogin');
+    final  password =  prefs.getString('passLogin');
 
       final Map<String, dynamic> authData = {
       'us_name': name,
@@ -134,11 +165,40 @@ final url = Uri.https(_baseUrl, "/units");
         unitsArray.add(user);
       }
       await prefs.setStringList('items', unitsArray);
-      print("YES");
+      // print("YES");
 
        notifyListeners();
 
 
 }
+  Future refreshListMapon() async{
+     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+
+final urlMapon = Uri.https(_baseUrl, "/units/mapon");
+
+      final respMapon = await http.get(
+        urlMapon,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': prefs.getString('idToken') ?? '',
+        },
+      );
+      var dataMapon = json.decode(respMapon.body);
+      //  print(data[0]);
+      List<String> unitsArrayMapon = [];
+      for (var element in dataMapon) {
+        String user = jsonEncode(element);
+        unitsArrayMapon.add(user);
+      }
+      await prefs.setStringList('itemsMapon', unitsArrayMapon);
+      // print("YES");
+
+       notifyListeners();
+
+
+}
+
+
 }
 

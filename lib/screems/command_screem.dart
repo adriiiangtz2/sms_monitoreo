@@ -520,7 +520,7 @@ class _formDeviceDelete extends StatelessWidget {
             ),
             // initialValue: data.mcMarca,
             
-            onChanged: (value) => registerForm.command = value,
+            onChanged: (value) => registerForm.command = value.trim().replaceAll("\\s{2,}", " "),
             validator: (value) => (registerForm.command == "ELIMINAR") ? null:"Ingrese ELIMINAR" ,
           ),
           const SizedBox(height: 30),

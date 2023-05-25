@@ -56,7 +56,7 @@ class ContentDevice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-     final dispositivos = Provider.of<DispositivosService>(context , listen: false);
+     final dispositivos = Provider.of<DispositivosService>(context );
     var device = dispositivos.devicesArray;
 
     return ChangeNotifierProvider(create:(context) => DispositivosService(),
@@ -157,24 +157,14 @@ void displayEliminarDevice(BuildContext context , marca) {
         final  comand = oneDevice.dvComandos;
         // print("ddddddddddddddddd");
         // print(oneDevice.idDispositivo);
+        // print('#########${oneDevice.idDispositivo}############# ');
+        
   
         return GestureDetector(
         onTap: () async {
-
-          // print(oneDevice.idDispositivo);
-          //  await marca.commandsAll();
-          // print(oneDevice.idDispositivo);
-          // await comandoss.commandSmsMenu(oneDevice.idDispositivo);
-          // await comandoss.commandsAll();
-
-          // print(comand.)
+  
           final String idDevice = "${oneDevice.idDispositivo}";
-          // registerForm.idPageDispositivo='';
-          // registerForm.idPageDispositivo = idDevice;
 
-          // await   dispositivos.dispositivosAll(marca.idMarca);
-          // print("Pres");
-           // ignore: use_build_context_synchronously
            Navigator.of(context).pushNamed('command', arguments: idDevice );
         },
         child: Card(
@@ -204,12 +194,40 @@ void displayEliminarDevice(BuildContext context , marca) {
                       child: const Text('EDITAR',
                           style: TextStyle(color: Colors.white)),
                     ),
+
                     MaterialButton(
                       minWidth: 100,
                       height: 35,
-                      onPressed: () {
-      
+                      onPressed: () async{
+                        final check = await comandoss.commandVerificar("${oneDevice.idDispositivo}");
+                        if(check) {
+                          print('Entro');
                         displayEliminarDevice(context , oneDevice);
+
+                        }else{
+                          return  showDialog(
+          barrierDismissible: true,
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              elevation: 5,
+              title: const Text('Eliminar comandos', textAlign: TextAlign.center),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusDirectional.circular(20)),
+              content: SizedBox(
+                width: 10,
+                child: Text("Para eliminar este dispositivo primero se tienen que eliminar los comandos registrados"),
+             
+              ),
+              actions: const [
+                // TextButton(
+                //     onPressed: () => Navigator.pop(context),
+                //     child: const Center(child: Text('vuelva a intentarlo'))),
+              ],
+            );
+          });
+
+                        }
       
                       },
                       color: const Color.fromARGB(255, 149, 8, 8),
@@ -342,7 +360,7 @@ class _formDeviceDelete extends StatelessWidget {
             ),
             // initialValue: data.mcMarca,
             
-            onChanged: (value) => registerForm.device = value,
+            onChanged: (value) => registerForm.device = value.trim().replaceAll("\\s{2,}", " "),
             validator: (value) => (registerForm.device == "ELIMINAR") ? null:"Ingrese ELIMINAR" ,
           ),
           const SizedBox(height: 30),

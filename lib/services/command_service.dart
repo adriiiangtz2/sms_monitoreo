@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:monitoreo_sms/models/models.dart';
@@ -142,16 +143,25 @@ Future createNameCommand(String name) async {
   
   Future<List> commandSms(lista , idhardware ) async{
      final SharedPreferences prefs = await SharedPreferences.getInstance();
-    
+    print(idhardware);
+    print("___");
+    print(lista);
+    print("___");
+
     var idDispo;
     for (Devices element in lista) {
-      if (idhardware == element.dvHardware) {
-        // print(element.idDispositivo);
+      final dvh = element.dvHardware;
+      // print(element.dvHardware);
+      if ('$idhardware'== dvh) {
+          print("Entrooo");
         
       idDispo=element.idDispositivo;
       }
       // print(idhardware);
     }
+    // print("___id");
+    // print(idDispo);
+    // print("___id");
 
     // print(idDispo);
     final url = Uri.https(baseUrl, "/sms/dispositivo_comando/get/dispositivo/all/$idDispo");
@@ -164,7 +174,9 @@ Future createNameCommand(String name) async {
       },
     );
 
-     final comandList = json.decode(resp.body);
+     final comandList = json.decode(resp.body); 
+     print(comandList);
+     print("----");
     var arraysms=[];
 
     //  print(comandList);
@@ -219,6 +231,26 @@ Future createNameCommand(String name) async {
      return arraysmsM;
 
 
+
+  }
+  Future<bool> commandVerificar(idDevice) async{
+     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    
+    // print(idDispo);
+    final url = Uri.https(baseUrl, "/sms/dispositivo_comando/get/dispositivo/all/$idDevice");
+
+    final resp = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': prefs.getString('idToken') ?? '',
+      },
+    );
+
+    
+     final comandList = json.decode(resp.body);
+
+     return (comandList.length == 0) ? true: false;
 
   }
 

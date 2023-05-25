@@ -77,6 +77,7 @@ class MarcasScreen extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class _contentMarcas extends StatelessWidget {
   const _contentMarcas({
     Key? key,
@@ -88,7 +89,7 @@ class _contentMarcas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-      final marcasAll = Provider.of<MarcaService>(context , listen: false);
+      final marcasAll = Provider.of<MarcaService>(context);
     
     List listMarca = marcasAll.marcaArray;
     return ChangeNotifierProvider(
@@ -98,6 +99,7 @@ class _contentMarcas extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class _listViewMarcas extends StatelessWidget {
   const _listViewMarcas({
     Key? key,
@@ -231,9 +233,36 @@ final dispositivos = Provider.of<DispositivosService>(context ,listen: false);
                       MaterialButton(
                         minWidth: 100,
                         height: 35,
-                        onPressed: () {
-        
+                        onPressed: () async{
+
+                          final check = await dispositivos.dispositivosMarcaCheck(marca.idMarca);
+                          if(check){
                           displayEliminar(context , marca);
+                          }else{
+                                 return  showDialog(
+          barrierDismissible: true,
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              elevation: 5,
+              title: const Text('Eliminar Dispositivos', textAlign: TextAlign.center),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusDirectional.circular(20)),
+              content: SizedBox(
+                width: 10,
+                child: Text("Para eliminar esta Marca primero se tienen que eliminar los Dispositivos registrados"),
+             
+              ),
+              actions: const [
+                // TextButton(
+                //     onPressed: () => Navigator.pop(context),
+                //     child: const Center(child: Text('vuelva a intentarlo'))),
+              ],
+            );
+          });
+
+
+                          }
         
                         },
                         color: const Color.fromARGB(255, 149, 8, 8),
@@ -252,10 +281,10 @@ final dispositivos = Provider.of<DispositivosService>(context ,listen: false);
   }
 }
 
+// ignore: camel_case_types
 class _formMarca extends StatelessWidget {
   const _formMarca({
     Key? key,
-    Key? marca,
   }) : super(key: key);
 
   @override
@@ -301,10 +330,11 @@ class _formMarca extends StatelessWidget {
                     //bloquear
                     registerForm.isLoading = true;
 
-                    print(registerForm.marca);
+                    // print(registerForm.marca);
                     await marcaserive.createMarca(registerForm.marca);
 
                     registerForm.isLoading = false;
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                     //desbloquear
                   },
@@ -314,9 +344,10 @@ class _formMarca extends StatelessWidget {
     );
   }
 }
+// ignore: camel_case_types
 class _formMarcaEdit extends StatelessWidget {
     final MarcaGps data;
-   _formMarcaEdit({
+   const _formMarcaEdit({
     required this.data
 
    });
@@ -327,7 +358,7 @@ class _formMarcaEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data.mcMarca);
+    // print(data.mcMarca);
       // print(wi)
 
     // print(marca);
@@ -377,11 +408,12 @@ class _formMarcaEdit extends StatelessWidget {
                     //bloquear
                     registerForm.isLoading = true;
                     
-                    print("marca: ${registerForm.marca}");
-                    print(data.idMarca);
+                    // print("marca: ${registerForm.marca}");
+                    // print(data.idMarca);
                     await marcaserive.editMarca(registerForm.marca, data.idMarca);
 
                     registerForm.isLoading = false;
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                     //desbloquear
                   },
@@ -391,9 +423,10 @@ class _formMarcaEdit extends StatelessWidget {
     );
   }
 }
+// ignore: camel_case_types
 class _formMarcaDelete extends StatelessWidget {
     final MarcaGps data;
-   _formMarcaDelete({
+   const _formMarcaDelete({
     required this.data
 
    });
@@ -424,7 +457,7 @@ class _formMarcaDelete extends StatelessWidget {
             ),
             // initialValue: data.mcMarca,
             
-            onChanged: (value) => registerForm.marca = value,
+            onChanged: (value) => registerForm.marca = value.trim().replaceAll("\\s{2,}", " "),
             validator: (value) => (registerForm.marca == "ELIMINAR") ? null:"Ingrese ELIMINAR" ,
           ),
           const SizedBox(height: 30),
@@ -458,6 +491,7 @@ class _formMarcaDelete extends StatelessWidget {
                     await marcaserive.deleteMarca(registerForm.marca, data.idMarca);
 
                     registerForm.isLoading = false;
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                     //desbloquear
                   },
@@ -469,6 +503,7 @@ class _formMarcaDelete extends StatelessWidget {
 }
 
 
+// ignore: camel_case_types
 class skeletonLoadingMarcas extends StatelessWidget {
   const skeletonLoadingMarcas({
     Key? key,
@@ -485,7 +520,7 @@ class skeletonLoadingMarcas extends StatelessWidget {
           children: [
 
         
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
            SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -496,9 +531,9 @@ class skeletonLoadingMarcas extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
              SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -509,9 +544,9 @@ class skeletonLoadingMarcas extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
             SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -522,9 +557,9 @@ class skeletonLoadingMarcas extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
           SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -535,9 +570,9 @@ class skeletonLoadingMarcas extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
             SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -548,9 +583,9 @@ class skeletonLoadingMarcas extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
             SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -561,7 +596,7 @@ class skeletonLoadingMarcas extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
         
         

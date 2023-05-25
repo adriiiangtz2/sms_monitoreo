@@ -44,6 +44,20 @@ class DispositivosService extends ChangeNotifier {
 
     return devicesArray;
   }
+    Future<bool> dispositivosMarcaCheck( idMarca) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final url = Uri.https(_baseUrl, "/sms/dispositivo/get/marca/${idMarca}");
+
+    final resp = await http.get( url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': prefs.getString('idToken') ?? '',
+      },
+    );
+    
+    final marcaList = json.decode(resp.body);
+    return (marcaList.length == 0) ? true : false;
+  }
 
       var deviceValidator =[];
       var deviceTotal =[];
@@ -116,6 +130,51 @@ class DispositivosService extends ChangeNotifier {
       final marcaserive = Provider.of<MarcaService>(context, listen: false);
 
       await units.getOnetUnit(idMarca);
+     await  marcaserive.marcasAll();
+          notifyListeners();
+  
+  
+
+
+
+
+
+    return marcaList ;
+  }
+    Future dispositivosTotal2Mapon(idMarca , context) async {
+      print("Entro en dispositivosTotal");
+    deviceValidator =[];
+    deviceTotal =[];
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+        // marcaArray = [];
+ final url = Uri.https(_baseUrl, "/sms/dispositivo/get/all");
+
+    final resp = await http.get( url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': prefs.getString('idToken') ?? '',
+      },
+    );
+    
+    final marcaList = json.decode(resp.body);
+    // print(marcaList);
+
+    // print("--- - -- - -- - ");
+
+    for (var element in marcaList) {
+      // print(element);
+      final tempUnits = Devices.fromJson(element);
+      // print(tempUnits);
+      // print(tempUnits.dvHardware);
+      deviceValidator.add(tempUnits.dvHardware);
+      // devicesArray.add(tempUnits);
+      deviceTotal.add(tempUnits);
+    }
+
+      final units = Provider.of<UnistProvider>(context, listen: false);
+      final marcaserive = Provider.of<MarcaService>(context, listen: false);
+
+      await units.getOnetUnitMapon(idMarca);
      await  marcaserive.marcasAll();
           notifyListeners();
   

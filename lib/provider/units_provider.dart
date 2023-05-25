@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:monitoreo_sms/models/models.dart';
+import 'package:monitoreo_sms/models/unitsDatailsMapon.dart';
 import 'package:monitoreo_sms/models/unitsNew.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,6 +45,26 @@ class UnistProvider extends ChangeNotifier {
     final decodeResp = json.decode(resp.body);
     final resps = UnitsDetails.fromMap(decodeResp);
     oneUnit = resps;
+    notifyListeners();
+  }
+  Future getOnetUnitMapon(int id) async {
+    oneUnit = "";
+    // oneUnit="";
+     final SharedPreferences prefs = await SharedPreferences.getInstance();
+     final url = Uri.https(_baseUrl, "/units/mapon/hardware/${id}");
+
+    final resp = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': prefs.getString('idToken') ?? '',}
+    );
+    final decodeResp = json.decode(resp.body);
+    final resps = UnitsDetailsMapon.fromJson(decodeResp);
+    oneUnit = resps;
+    print("resps.model");
+    print(resps.model);
+
     notifyListeners();
   }
 

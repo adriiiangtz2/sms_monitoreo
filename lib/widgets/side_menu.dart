@@ -18,7 +18,7 @@ class SideMenu extends StatelessWidget {
                 leading: const Icon(Icons.car_repair_sharp , color: AppTheme.primary),
                 title: const Text('Unidades'),
                 onTap: () {
-                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen3()));
+                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => InicioScreen()));
                   // Navigator.pushNamed(context, 'home3');
 
                 },

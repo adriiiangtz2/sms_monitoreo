@@ -88,6 +88,7 @@ class TypesCommandScreen extends StatelessWidget {
   
 }
 
+// ignore: camel_case_types
 class _contentInfo extends StatelessWidget {
   const _contentInfo({
     Key? key,
@@ -113,12 +114,14 @@ class _contentInfo extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class _listViewCommandType extends StatelessWidget {
   const _listViewCommandType({
     Key? key,
     required this.comandosType,
   }) : super(key: key);
 
+  // ignore: prefer_typing_uninitialized_variables
   final comandosType;
    void displayEditar(BuildContext context , marca) {
   // print(listMarca);;
@@ -193,7 +196,7 @@ class _listViewCommandType extends StatelessWidget {
       padding: const EdgeInsets.only(left: 5, right: 10, bottom: 70, top: 5),
       itemCount: comandosType.length,
       itemBuilder:(context, index) {
-        print(comandosType.length);
+        // print(comandosType.length);
 
         // final Devices oneDevice =  device[index];
         final  Command comandType = comandosType[index];
@@ -245,10 +248,10 @@ class _listViewCommandType extends StatelessWidget {
 }
 
 
+// ignore: camel_case_types
 class _formTypeCommand extends StatelessWidget {
   const _formTypeCommand({
     Key? key,
-    Key? marca,
   }) : super(key: key);
 
   @override
@@ -294,10 +297,11 @@ class _formTypeCommand extends StatelessWidget {
                     //bloquear
                     registerForm.isLoading = true;
 
-                    print(registerForm.command);
+                    // print(registerForm.command);
                     await commandService.createNameCommand(registerForm.command);
 
                     registerForm.isLoading = false;
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                     //desbloquear
                   },
@@ -309,9 +313,10 @@ class _formTypeCommand extends StatelessWidget {
 }
 
 
+// ignore: camel_case_types
 class _formMarcaEdit extends StatelessWidget {
     final Command data;
-   _formMarcaEdit({
+   const _formMarcaEdit({
     required this.data
 
    });
@@ -322,7 +327,7 @@ class _formMarcaEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data.cdComando);
+    // print(data.cdComando);
       // print(wi)
 
     // print(marca);
@@ -372,11 +377,12 @@ class _formMarcaEdit extends StatelessWidget {
                     //bloquear
                     registerForm.isLoading = true;
                     
-                    print("marca: ${registerForm.command}");
-                    print(data.cdComando);
+                    // print("marca: ${registerForm.command}");
+                    // print(data.cdComando);
                     await comanTypeserive.editNameCommand(registerForm.command, data.idComando);
 
                     registerForm.isLoading = false;
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                     //desbloquear
                   },
@@ -387,6 +393,7 @@ class _formMarcaEdit extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class skeletonLoadingTypes extends StatelessWidget {
   const skeletonLoadingTypes({
     Key? key,
@@ -403,7 +410,7 @@ class skeletonLoadingTypes extends StatelessWidget {
           children: [
 
         
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
              SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -414,9 +421,9 @@ class skeletonLoadingTypes extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
           SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -427,9 +434,9 @@ class skeletonLoadingTypes extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
               SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -440,9 +447,9 @@ class skeletonLoadingTypes extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
          SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -453,9 +460,9 @@ class skeletonLoadingTypes extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
            SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -466,9 +473,9 @@ class skeletonLoadingTypes extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
             SkeletonParagraph(
             style: SkeletonParagraphStyle(
                 lines: 2,
@@ -479,7 +486,7 @@ class skeletonLoadingTypes extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   minLength: MediaQuery.of(context).size.width / 2,
                 ))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           
         
         
@@ -495,9 +502,10 @@ class skeletonLoadingTypes extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class _formComandoDelete extends StatelessWidget {
     final Command data;
-   _formComandoDelete({
+   const _formComandoDelete({
     required this.data
 
    });
@@ -557,8 +565,8 @@ class _formComandoDelete extends StatelessWidget {
                     //bloquear
                     registerForm.isLoading = true;
 
-                    print(registerForm.device);
-                    print(data.idComando);
+                    // print(registerForm.device);
+                    // print(data.idComando);
 
                     await comandSerive.deleteNameCommand(data.idComando);
                     // await deviceSerive.deleteDevice(data.idDispositivo , data.marca.idMarca);
@@ -567,6 +575,7 @@ class _formComandoDelete extends StatelessWidget {
 
 
                     registerForm.isLoading = false;
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                     //desbloquear
                   },

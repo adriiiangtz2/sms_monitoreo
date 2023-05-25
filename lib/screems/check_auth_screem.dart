@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:monitoreo_sms/services/services.dart';
 import 'package:provider/provider.dart';
-import 'package:monitoreo_sms/provider/provider.dart';
 import 'package:monitoreo_sms/screems/screems.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -13,20 +12,18 @@ class CheckAuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final unidadesProvider = Provider.of<UnistProvider>(context);
-     
     return Scaffold(
       body: Center(
         child: FutureBuilder(
             future: readToken(context),
-            builder: (BuildContext context, AsyncSnapshot snapshot)   {
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return const CircularProgressIndicator.adaptive();
               }
-              if (snapshot.data == "") {           
+
+
+              if (snapshot.data == "") {
                 Future.microtask(() {
-                  // authService.logaut();
-                  // Navigator.of(context).pushReplacementNamed('login');
                   Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
@@ -34,12 +31,12 @@ class CheckAuthScreen extends StatelessWidget {
                           transitionDuration: const Duration(seconds: 0)));
                 });
               } else {
-                // unidadesProvider.getUnits();
                 Future.microtask(() {
                   Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
-                          pageBuilder: (_, __, ___) => const HomeScreen3(),
+                           pageBuilder: (_, __, ___) =>  InicioScreen(),
+                          // pageBuilder: (_, __, ___) => const HomeScreen3(),
                           transitionDuration: const Duration(seconds: 0)));
                 });
               }
@@ -49,81 +46,45 @@ class CheckAuthScreen extends StatelessWidget {
     );
   }
 
-  Future<String?> readToken( context) async {
+  Future<String?> readToken(context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    //  final marcas= Provider.of<MarcaService>(context, listen: false);
-    //   final device= Provider.of<DispositivosService>(context, listen: false);
+    final token = prefs.getString('idToken') ?? "";
+    String baseUrl = 'www.consola-sudsolutions.mx';
     
-    var token = prefs.getString('idToken') ?? "";
     if (token == "") {
+      
       return "";
-    } else {  
-
-
-          try {
-               String baseUrl = 'www.consola-sudsolutions.mx';
-
-         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        // marcaArray = [];
+    
+    } else {
+      
+      try {
+        
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
         final url = Uri.https(baseUrl, "/sms/comando/get/all");
 
-    final resp = await http.get( url,
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization':prefs.getString('idToken') ?? "",
-      },
-    );
-    
-    final respuesta = json.decode(resp.body);
-
-    print(respuesta);
-    print(respuesta[0]["comando"]);
-
-          // if (respuesta['error']== "token is invalid") {
-          // }
-
+        await http.get(
+          url,
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': prefs.getString('idToken') ?? "",
+          },
+        );
+        // final respuesta = json.decode(resp.body);
         // print(respuesta);
-        // if (respuesta['error']== "token is invalid") {
-          
-        //    final auth = Provider.of<AuthService>(context , listen: false);
-        //    await auth.readToken();
-
-        //    print(prefs.getString('idToken') ?? "");
-
-        //    return prefs.getString('idToken') ?? "";
-        // }
-
-        print("correcto");
-
+        // print(respuesta[0]["comando"]);
+        // print("correcto");
 
         return prefs.getString('idToken') ?? "";
-          
-          
-          
-          } catch (e) {
+      } catch (e) {
+        // print("Fallo");
 
-            print("Fallo");
-          
-          
-           final auth = Provider.of<AuthService>(context , listen: false);
-           await auth.readToken();
+        final auth = Provider.of<AuthService>(context, listen: false);
+        await auth.refresToken();
 
-           print(prefs.getString('idToken') ?? "");
+        // print(prefs.getString('idToken') ?? "");
 
-           return prefs.getString('idToken') ?? "";
-           
-          }
-
-      
-
-
-
-        // await marcas.marcasAll();
-        // await device.dispositivosTotal();
-      
-      // return prefs.getString('idToken') ?? "";
+        return prefs.getString('idToken') ?? "";
+      }
     }
   }
 }
-
-

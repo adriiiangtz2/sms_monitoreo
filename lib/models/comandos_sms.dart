@@ -68,7 +68,7 @@ class Dispositivo {
 
     List<Comando> dvComandos;
     String dvDispositivo;
-    int dvHardware;
+    String dvHardware;
     String dvImage;
     int idDispositivo;
     Marcas marca;

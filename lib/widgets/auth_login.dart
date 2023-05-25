@@ -22,8 +22,8 @@ class AuthLogin extends StatelessWidget {
             width: double.infinity,
             margin: const EdgeInsets.only(top: 160, ),
             // color: Colors.red,
-            child: Column(
-              children:const [
+            child: const Column(
+              children:[
                 CircleAvatar(
                   maxRadius: 35,
                   backgroundImage: AssetImage('assets/logo.jpg',),
@@ -48,11 +48,11 @@ class AuthLogin extends StatelessWidget {
 }
 
 class _TopBox extends StatelessWidget {
-  const _TopBox({super.key});
+  const _TopBox();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 250,
       // color: Colors.red,
